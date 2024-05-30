@@ -94,7 +94,7 @@ public class A2_G2_t2 {
 
     private static List<Point> regionQuery(Point point) {
       List<Point> neighbors = new ArrayList<>();
-      
+
       for (Point p : points) {
           if (distance(point, p) <= epsilon) {
               neighbors.add(p);
@@ -115,8 +115,8 @@ public class A2_G2_t2 {
               noiseCount++;
           }
       }
-      System.out.println("Number of clusters: " + clusters.size());
-      System.out.println("Number of noise: " + noiseCount);
+      System.out.println("Number of clusters : " + clusters.size());
+      System.out.println("Number of noise : " + noiseCount);
 
       for (Map.Entry<Integer, List<Point>> entry : clusters.entrySet()) {
           System.out.print("Cluster #" + entry.getKey() + " => ");
