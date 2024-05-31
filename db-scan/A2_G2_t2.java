@@ -109,6 +109,7 @@ public class A2_G2_t2 {
             point.visited = true;
             List<Point> neighbors = regionQuery(point);
 
+            // minPts값보다 작을 경우 noise
             if (neighbors.size() < minPts) {
                 point.noise = true;
                 continue; 
@@ -123,6 +124,7 @@ public class A2_G2_t2 {
         return clusters;
     }
 
+    // 군집된 neighbors를 대상으로 regionQuery 반복
     private static void expandCluster(Point point, List<Point> neighbors, List<Point> cluster, int clusterId) {
         cluster.add(point);
         point.clusterId = clusterId;
@@ -135,6 +137,7 @@ public class A2_G2_t2 {
                 neighbor.visited = true;
                 List<Point> newNeighbors = regionQuery(neighbor);
 
+                // minPts보다 같거나 클 경우 expand
                 if (newNeighbors.size() >= minPts) {
                     neighbors.addAll(newNeighbors);
                 }
@@ -149,49 +152,51 @@ public class A2_G2_t2 {
         }
     }
 
+    // 최소 epsilon 이내 최소 neighbors 수를 만족하는 군집 찾기
     private static List<Point> regionQuery(Point point) {
-      List<Point> neighbors = new ArrayList<>();
+        List<Point> neighbors = new ArrayList<>();
 
-      for (Point p : points) {
-          if (distance(point, p) <= epsilon) {
-              neighbors.add(p);
-          }
-      }
+        for (Point p : points) {
+            if (distance(point, p) <= epsilon) {
+                neighbors.add(p);
+            }
+        }
 
-      return neighbors;
-  }
+        return neighbors;
+    }
 
     private static double distance(Point p1, Point p2) {
         return Math.sqrt(Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2));
     }
 
     private static void printResults(Map<Integer, List<Point>> clusters) {
-      int noiseCount = 0;
-      for (Point point : points) {
-          if (point.noise && point.clusterId == 0) {
-              noiseCount++;
-          }
-      }
-      System.out.println("Number of clusters : " + clusters.size());
-      System.out.println("Number of noise : " + noiseCount);
+        int noiseCount = 0;
+        for (Point point : points) {
+            if (point.noise && point.clusterId == 0) {
+                noiseCount++;
+            }
+        }
+        System.out.println("Number of clusters : " + clusters.size());
+        System.out.println("Number of noise : " + noiseCount);
 
-      for (Map.Entry<Integer, List<Point>> entry : clusters.entrySet()) {
-          System.out.print("Cluster #" + entry.getKey() + " => ");
-          List<Point> sortedPoints = entry.getValue();
-          Collections.sort(sortedPoints, new Comparator<Point>() {
-              @Override
-              public int compare(Point p1, Point p2) {
-                  int num1 = Integer.parseInt(p1.id.substring(1));
-                  int num2 = Integer.parseInt(p2.id.substring(1));
-                  return Integer.compare(num1, num2);
-              }
-          });
-          for (Point p : sortedPoints) {
-              System.out.print(p.id + " ");
-          }
-          System.out.println();
-      }
-  }
+        for (Map.Entry<Integer, List<Point>> entry : clusters.entrySet()) {
+            System.out.print("Cluster #" + entry.getKey() + " => ");
+            List<Point> sortedPoints = entry.getValue();
+            // 오름차순 정렬
+            Collections.sort(sortedPoints, new Comparator<Point>() {
+                @Override
+                public int compare(Point p1, Point p2) {
+                    int num1 = Integer.parseInt(p1.id.substring(1));
+                    int num2 = Integer.parseInt(p2.id.substring(1));
+                    return Integer.compare(num1, num2);
+                }
+            });
+            for (Point p : sortedPoints) {
+                System.out.print(p.id + " ");
+            }
+            System.out.println();
+        }
+    }
 
     static class Point {
         String id;
