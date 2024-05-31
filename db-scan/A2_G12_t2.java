@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 
-public class A2_G2_t2 {
+public class A2_G12_t2 {
     private static List<Point> points = new ArrayList<>();
     private static double epsilon;
     private static int minPts = 4; // 2차원 데이터의 경우 4가 적절, (minPts = dim*2)
