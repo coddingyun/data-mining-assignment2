@@ -8,6 +8,8 @@ public class A2_G2_t2 {
 
     public static void main(String[] args) throws IOException {
         String filename = args[0];
+        readCSV(filename);
+
         if (args.length == 3) {
             if (args[1].contains(".")) {
                 epsilon = Double.parseDouble(args[1]);
@@ -22,15 +24,70 @@ public class A2_G2_t2 {
                 System.out.println("Estimated MinPts: " + minPts);
             } else {
                 minPts = Integer.parseInt(args[1]); // 아닐 경우 minPts
+                // epsilon = estimateEpsilon(); // epsilon 추정 실험, 아래의 두 함수중 하나만 주석 제거 후 실험
                 System.out.println("Estimated eps: " + epsilon);
             }
         }
 
-        readCSV(filename);
         Map<Integer, List<Point>> clusters = dbscan();
 
         printResults(clusters);
     }
+
+    // k-distance Estimation으로 epsilon 추정
+    // private static double estimateEpsilon() {
+    //     int k = minPts;
+
+    //     double[] distances = new double[points.size()];
+
+    //     for (int i = 0; i < points.size(); i++) {
+    //         Point point = points.get(i);
+    //         double[] pointDistances = new double[points.size() - 1];
+    //         int index = 0;
+    //         for (int j = 0; j < points.size(); j++) {
+    //             if (i != j) {
+    //                 pointDistances[index++] = distance(point, points.get(j));
+    //             }
+    //         }
+    //         Arrays.sort(pointDistances);
+    //         distances[i] = pointDistances[k - 1];
+    //     }
+
+    //     Arrays.sort(distances);
+    //     return distances[k - 1];
+    // }
+
+  // Elbow Method로 epsilon 추정
+  // private static double estimateEpsilon() {
+  //       int k = minPts;
+
+  //       double[] distances = new double[points.size() * (points.size() - 1) / 2];
+  //       int index = 0;
+
+  //       for (int i = 0; i < points.size(); i++) {
+  //           Point point = points.get(i);
+  //           for (int j = i + 1; j < points.size(); j++) {
+  //               distances[index++] = distance(point, points.get(j));
+  //           }
+  //       }
+
+  //       Arrays.sort(distances);
+
+  //       // Elbow method
+  //       double maxSlope = Double.MIN_VALUE;
+  //       int valleyIndex = 0;
+  //       for (int i = k; i < distances.length - k; i++) {
+  //           double slope = (distances[i + k] - distances[i]) / k;
+  //           if (slope < maxSlope) {
+  //               maxSlope = slope;
+  //               valleyIndex = i;
+  //           }
+  //       }
+
+  //       double epsilon = distances[valleyIndex];
+
+  //       return epsilon;
+  //   }
 
     private static void readCSV(String filename) throws IOException {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
